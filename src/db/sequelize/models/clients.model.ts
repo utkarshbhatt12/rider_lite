@@ -3,20 +3,19 @@ import {
   Model,
   type Sequelize,
   type CreationOptional,
-  type ForeignKey,
   type InferAttributes,
   type InferCreationAttributes,
 } from 'sequelize';
-import type { Riders } from './riders.model';
 
-export class RiderLocations extends Model<
-  InferAttributes<RiderLocations>,
-  InferCreationAttributes<RiderLocations>
+export class Clients extends Model<
+  InferAttributes<Clients>,
+  InferCreationAttributes<Clients>
 > {
   declare id: CreationOptional<number>;
-  declare riderId: ForeignKey<Riders['id']>;
-  declare location: string;
-  declare status: Riders['status'];
+  declare authToken: string;
+  declare name: string;
+  declare phoneNumber: string;
+  declare isActive: boolean;
 
   // Dates...
   declare createdAt: CreationOptional<Date>;
@@ -25,24 +24,27 @@ export class RiderLocations extends Model<
 }
 
 export default (sequelizeInstance: Sequelize) => {
-  return RiderLocations.init(
+  return Clients.init(
     {
       id: {
         type: DataTypes.BIGINT,
         autoIncrement: true,
         primaryKey: true,
       },
-      riderId: {
-        type: DataTypes.BIGINT,
+      authToken: {
+        type: DataTypes.STRING(32),
         allowNull: false,
       },
-      location: {
-        type: DataTypes.GEOMETRY('POINT'),
+      name: {
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
-      status: {
-        type: DataTypes.ENUM('online', 'offline', 'out_for_delivery'),
+      phoneNumber: {
+        type: DataTypes.STRING(10),
         allowNull: false,
+      },
+      isActive: {
+        type: DataTypes.BOOLEAN,
       },
       createdAt: DataTypes.DATE,
       updatedAt: {
@@ -61,9 +63,9 @@ export default (sequelizeInstance: Sequelize) => {
       timestamps: true,
       indexes: [
         {
-          name: 'idx_location',
-          fields: ['location'],
-          type: 'SPATIAL',
+          name: 'idx_auth_token_name',
+          fields: ['auth_token', 'name'],
+          unique: true,
         },
       ],
     },

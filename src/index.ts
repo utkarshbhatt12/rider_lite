@@ -1,9 +1,7 @@
+import type { Express, NextFunction, Request, Response } from 'express';
+
 import express from 'express';
 import cors from 'cors';
-
-const { PORT } = process.env;
-
-import type { Express, NextFunction, Request, Response } from 'express';
 
 import 'db/redis';
 import 'db/sequelize';
@@ -20,8 +18,8 @@ const bootstrap = (params: { app: Express }) => {
     (
       _req,
       res: Response<{
-        message: string;
-        env: typeof process.env.NODE_ENV;
+        message: 'PONG';
+        env: string;
         timestamp: Date;
       }>,
     ) => {
@@ -47,7 +45,13 @@ const bootstrap = (params: { app: Express }) => {
     next();
   });
 
+  const {
+    env: { PORT },
+  } = process;
+
   app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+
+  return app;
 };
 
 bootstrap({ app: express() });

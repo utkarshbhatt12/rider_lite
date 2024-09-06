@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "DEBUG_COLORS=1 DEBUG=ioredis:*,sequelize:* DEBUG_SHOW_HIDDEN=1 DEBUG_HIDE_DATE=1 bun --watch run src/index.ts",
     "prebuild": "rm -rf build/*",
-    "build": "bun build src/* --outdir build"
+    "build": "bun build src/* --outdir build/*",
+    "prestart": "bun run build",
+    "start": "NODE_ENV=production node build/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +30,8 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
-    "mysql2": "^3.11.0",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.3"
   }
 }
