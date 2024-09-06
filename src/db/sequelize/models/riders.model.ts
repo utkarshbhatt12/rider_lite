@@ -5,7 +5,10 @@ import {
   type CreationOptional,
   type InferAttributes,
   type InferCreationAttributes,
+  type ForeignKey,
 } from 'sequelize';
+
+import { Clients } from 'db/sequelize/models/clients.model';
 
 export class Riders extends Model<
   InferAttributes<Riders>,
@@ -22,6 +25,7 @@ export class Riders extends Model<
   declare gender: 'male' | 'female' | 'other';
   declare status: 'online' | 'offline' | 'out_for_delivery';
   declare dob: Date;
+  declare clientId: ForeignKey<Clients['id']>;
 
   // Dates...
   declare createdAt: CreationOptional<Date>;
@@ -77,6 +81,10 @@ export default (sequelizeInstance: Sequelize) => {
       dob: {
         type: DataTypes.DATEONLY,
         allowNull: false,
+      },
+      clientId: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
       },
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,

@@ -8,6 +8,7 @@ import {
   type InferCreationAttributes,
 } from 'sequelize';
 import type { Riders } from './riders.model';
+import type { Clients } from './clients.model';
 
 export class RiderLocations extends Model<
   InferAttributes<RiderLocations>,
@@ -15,8 +16,9 @@ export class RiderLocations extends Model<
 > {
   declare id: CreationOptional<number>;
   declare riderId: ForeignKey<Riders['id']>;
-  declare location: string;
-  declare status: Riders['status'];
+  declare clientId: ForeignKey<Clients['id']>;
+  declare location: { type: 'Point'; coordinates: [number, number] };
+  declare bearing: number | null;
 
   // Dates...
   declare createdAt: CreationOptional<Date>;
@@ -40,9 +42,24 @@ export default (sequelizeInstance: Sequelize) => {
         type: DataTypes.GEOMETRY('POINT'),
         allowNull: false,
       },
-      status: {
-        type: DataTypes.ENUM('online', 'offline', 'out_for_delivery'),
-        allowNull: false,
+      clientId: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+      },
+      bearing: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+        validate: {
+          isNumeric: true,
+          min: {
+            args: [0],
+            msg: 'Minimum bearing is 0',
+          },
+          max: {
+            args: [360],
+            msg: 'Maximum bearing is 360',
+          },
+        },
       },
       createdAt: DataTypes.DATE,
       updatedAt: {

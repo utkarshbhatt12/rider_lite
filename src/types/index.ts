@@ -1,9 +1,12 @@
+import { Riders } from 'db/sequelize/models/riders.model';
+
 export type ClientAttrs = {
-  id: number;
-  isActive: boolean;
-  name: string;
-  phoneNumber: string;
+  id: Riders['id'];
+  isActive: Riders['isActive'];
+  name: Riders['name'];
+  phoneNumber: Riders['phoneNumber'];
   authToken: string;
+  clientId: Riders['clientId'];
 };
 
 export type PlaceOrderRequestBody = {};
@@ -29,4 +32,8 @@ export type RiderLocationRequestBody = {
   longitude: number;
   bearing: number;
   timestamp: number;
+};
+
+export type PutRiderLocationResponse = {
+  message: string;
 };

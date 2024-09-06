@@ -25,10 +25,10 @@ const sequelize = new Sequelize(<string>process.env['DB_URL'], {
 applyAssociations(sequelize);
 
 if (process.env.NODE_ENV === 'development') {
-  // sequelize
-  //   .sync({ alter: true })
-  //   .then(() => console.log('Tables altered'))
-  //   .catch((err) => console.error(err));
+  sequelize
+    .sync({ alter: true })
+    .then(() => console.log('Tables altered'))
+    .catch((err) => console.error(err));
 }
 
 export default sequelize;

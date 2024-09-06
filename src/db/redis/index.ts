@@ -1,22 +1,10 @@
 import Redis from 'ioredis';
 
-const keyPrefix = `rider_lite:${process.env.NODE_ENV}:`;
-const enableAutoPipelining = true;
-
-const redis =
-  process.env.NODE_ENV === 'development'
-    ? new Redis({
-        keyPrefix,
-        enableAutoPipelining,
-        host: process.env['REDIS_HOST'],
-        port: Number(process.env['REDIS_PORT']),
-        username: process.env['REDIS_USERNAME'],
-        password: process.env['REDIS_PASSWORD'],
-      })
-    : new Redis(process.env['UPSTASH_REDIS_HOST'] as string, {
-        enableAutoPipelining,
-        keyPrefix,
-      });
+const redis = new Redis(process.env['UPSTASH_REDIS_HOST'] as string, {
+  enableAutoPipelining: true,
+  keyPrefix: `rider_lite:${process.env.NODE_ENV}:`,
+  showFriendlyErrorStack: process.env.NODE_ENV !== 'production',
+});
 
 redis
   .on('error', (err) => {
